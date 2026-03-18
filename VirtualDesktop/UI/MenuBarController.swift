@@ -8,7 +8,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     private var activePopover: RenamePopover?
     private var clickTimer: Timer?
     private let menu: NSMenu
-    private let overlay = OverlayWindow()
+    private let overlay = OverlayController()
 
     init(spaceDetector: SpaceDetector, nameStore: NameStore) {
         self.spaceDetector = spaceDetector
