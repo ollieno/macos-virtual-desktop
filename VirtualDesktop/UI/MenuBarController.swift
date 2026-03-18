@@ -6,13 +6,17 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     private let nameStore: NameStore
     private var spaceChangeObservation: NSObjectProtocol?
     private var activePopover: RenamePopover?
+    private var clickTimer: Timer?
+    private let menu: NSMenu
 
     init(spaceDetector: SpaceDetector, nameStore: NameStore) {
         self.spaceDetector = spaceDetector
         self.nameStore = nameStore
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        self.menu = NSMenu()
         super.init()
 
+        menu.delegate = self
         setupStatusItem()
         observeSpaceChanges()
         updateTitle()
@@ -21,10 +25,11 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     // MARK: - Setup
 
     private func setupStatusItem() {
-        let menu = NSMenu()
-        menu.delegate = self
-        statusItem.menu = menu
-        populateMenu(menu)
+        // Don't assign menu directly: we handle clicks ourselves
+        // to distinguish single-click (open menu) from double-click (rename)
+        statusItem.button?.target = self
+        statusItem.button?.action = #selector(statusItemClicked(_:))
+        statusItem.button?.sendAction(on: [.leftMouseUp])
     }
 
     private func observeSpaceChanges() {
@@ -35,6 +40,34 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         ) { [weak self] _ in
             self?.updateTitle()
         }
+    }
+
+    // MARK: - Click handling
+
+    @objc private func statusItemClicked(_ sender: NSStatusBarButton) {
+        let event = NSApp.currentEvent
+        let clickCount = event?.clickCount ?? 1
+
+        if clickCount == 2 {
+            // Double-click: cancel pending single-click and rename current desktop
+            clickTimer?.invalidate()
+            clickTimer = nil
+            renameCurrentDesktop()
+        } else {
+            // Single click: wait briefly to see if a double-click follows
+            clickTimer?.invalidate()
+            clickTimer = Timer.scheduledTimer(withTimeInterval: NSEvent.doubleClickInterval, repeats: false) { [weak self] _ in
+                self?.showMenu()
+            }
+        }
+    }
+
+    private func showMenu() {
+        populateMenu(menu)
+        statusItem.menu = menu
+        statusItem.button?.performClick(nil)
+        // Remove menu immediately so future clicks go to our action handler again
+        statusItem.menu = nil
     }
 
     // MARK: - Update
@@ -83,18 +116,22 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         menu.addItem(quitItem)
     }
 
-    // MARK: - NSMenuDelegate
-
-    func menuWillOpen(_ menu: NSMenu) {
-        populateMenu(menu)
-    }
-
     // MARK: - Actions
+
+    private func renameCurrentDesktop() {
+        let uuid = spaceDetector.activeSpaceUUID()
+        let index = spaceDetector.activeSpaceIndex()
+        showRenamePopover(forUUID: uuid, atIndex: index)
+    }
 
     @objc private func renameClicked(_ sender: NSMenuItem) {
         guard let info = sender.representedObject as? [String: Any],
               let uuid = info["uuid"] as? String,
               let index = info["index"] as? Int else { return }
+        showRenamePopover(forUUID: uuid, atIndex: index)
+    }
+
+    private func showRenamePopover(forUUID uuid: String, atIndex index: Int) {
         let currentName = nameStore.name(forSpaceID: uuid, atIndex: index)
 
         let popover = RenamePopover(
@@ -118,6 +155,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     }
 
     deinit {
+        clickTimer?.invalidate()
         if let observation = spaceChangeObservation {
             NotificationCenter.default.removeObserver(observation)
         }
