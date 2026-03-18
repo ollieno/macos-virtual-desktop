@@ -98,7 +98,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         let index = spaceDetector.activeSpaceIndex()
         if Settings.showIdentifier {
             let name = nameStore.displayName(forSpaceID: uuid, atIndex: index)
-            identifier.update(name: name, index: index)
+            identifier.update(name: name, index: index, spaceUUID: uuid)
         } else {
             identifier.hide()
         }

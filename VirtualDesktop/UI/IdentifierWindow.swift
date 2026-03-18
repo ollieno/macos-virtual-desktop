@@ -39,14 +39,14 @@ private final class IdentifierPanel: NSPanel {
             defer: false
         )
 
-        level = NSWindow.Level(Int(CGWindowLevelForKey(.desktopIconWindow)) + 1)
+        level = .normal
         isOpaque = false
         backgroundColor = .clear
         ignoresMouseEvents = true
         hasShadow = false
     }
 
-    func update(name: String, color: Color, on screen: NSScreen) {
+    func show(name: String, color: Color, on screen: NSScreen) {
         let view = IdentifierView(name: name, color: color)
         if let existing = hostingView {
             existing.rootView = view
@@ -65,38 +65,48 @@ private final class IdentifierPanel: NSPanel {
         let y = screenFrame.midY - size.height / 2
         setFrameOrigin(NSPoint(x: x, y: y))
 
-        orderFrontRegardless()
+        orderFront(nil)
+        // Push behind all other normal windows
+        order(.below, relativeTo: 0)
     }
 }
 
-// MARK: - Identifier controller (manages one panel per screen)
+// MARK: - Identifier controller (one panel per desktop per screen)
 
 final class IdentifierController {
-    private var panels: [IdentifierPanel] = []
+    // Panels keyed by spaceUUID, each containing one panel per screen
+    private var panelsPerSpace: [String: [IdentifierPanel]] = [:]
 
     func hide() {
-        for panel in panels {
-            panel.orderOut(nil)
+        for (_, panels) in panelsPerSpace {
+            for panel in panels {
+                panel.orderOut(nil)
+            }
         }
     }
 
-    func update(name: String, index: Int) {
+    func update(name: String, index: Int, spaceUUID: String) {
         let screens = NSScreen.screens
         let color = DesktopColors.color(forIndex: index)
 
-        // Ensure we have enough panels
+        // Get or create panels for this specific desktop
+        var panels = panelsPerSpace[spaceUUID] ?? []
+
+        // Ensure we have enough panels for all screens
         while panels.count < screens.count {
             panels.append(IdentifierPanel())
         }
 
-        // Update each screen
+        // Show on each screen
         for (i, screen) in screens.enumerated() {
-            panels[i].update(name: name, color: color, on: screen)
+            panels[i].show(name: name, color: color, on: screen)
         }
 
         // Hide extra panels if screens were disconnected
         for i in screens.count..<panels.count {
             panels[i].orderOut(nil)
         }
+
+        panelsPerSpace[spaceUUID] = panels
     }
 }
