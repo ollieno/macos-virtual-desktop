@@ -7,6 +7,11 @@ final class SettingsTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: "showIdentifier")
     }
 
+    override func tearDown() {
+        UserDefaults.standard.removeObject(forKey: "showIdentifier")
+        super.tearDown()
+    }
+
     func testShowIdentifierDefaultsToTrue() {
         XCTAssertTrue(Settings.showIdentifier)
     }
