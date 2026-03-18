@@ -8,6 +8,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     private var activePopover: RenamePopover?
     private var clickTimer: Timer?
     private let menu: NSMenu
+    private let overlay = OverlayWindow()
 
     init(spaceDetector: SpaceDetector, nameStore: NameStore) {
         self.spaceDetector = spaceDetector
@@ -38,7 +39,12 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.updateTitle()
+            guard let self else { return }
+            self.updateTitle()
+            let uuid = self.spaceDetector.activeSpaceUUID()
+            let index = self.spaceDetector.activeSpaceIndex()
+            let name = self.nameStore.displayName(forSpaceID: uuid, atIndex: index)
+            self.overlay.show(name: name)
         }
     }
 
