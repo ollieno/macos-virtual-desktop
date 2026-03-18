@@ -16,6 +16,7 @@
 		AA3BA2C9FD012F4172ED05C2 /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAABB1F182D0D8C1D36FE12 /* LaunchAtLogin.swift */; };
 		B3EB34C5EAF8D7AB45CFB7B3 /* OverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */; };
 		BC1782517D0DC5D58FB34EAE /* NameStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */; };
+		A1B2C3D4E5F607182930A1B2 /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F607182930A1B2C3 /* SettingsTests.swift */; };
 		BE99A3A033D8A3624283858B /* RenamePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B72B3C7E7E845BE27BE318C /* RenamePopover.swift */; };
 		C4A1B2D3E5F60718293A4B5C /* DesktopColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B2C3E4F6071829304B5C6D /* DesktopColors.swift */; };
 		E6C3D4F50819293A4B5C6D7E /* BorderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D4E5061A2B3C4D5E6F7081 /* BorderWindow.swift */; };
@@ -45,6 +46,7 @@ E5F607182930A1B2C3D4E5F6 /* Settings.swift */ = {isa = PBXFileReference; lastKno
 		3B72B3C7E7E845BE27BE318C /* RenamePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenamePopover.swift; sourceTree = "<group>"; };
 		3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameStoreTests.swift; sourceTree = "<group>"; };
 		4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceDetectorTests.swift; sourceTree = "<group>"; };
+		B2C3D4E5F607182930A1B2C3 /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		510CF64BBA085656EC9F5C29 /* VirtualDesktop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VirtualDesktop.entitlements; sourceTree = "<group>"; };
 		7BAABB1F182D0D8C1D36FE12 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		925F3A015121EB5536E99DC3 /* SpaceDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceDetector.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 			isa = PBXGroup;
 			children = (
 				3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */,
+				B2C3D4E5F607182930A1B2C3 /* SettingsTests.swift */,
 				4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */,
 			);
 			path = VirtualDesktopTests;
@@ -221,6 +224,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 			buildActionMask = 2147483647;
 			files = (
 				BC1782517D0DC5D58FB34EAE /* NameStoreTests.swift in Sources */,
+				A1B2C3D4E5F607182930A1B2 /* SettingsTests.swift in Sources */,
 				00A175CFA64534F2154ECB1B /* SpaceDetectorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
