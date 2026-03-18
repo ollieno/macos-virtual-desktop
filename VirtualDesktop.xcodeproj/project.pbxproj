@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		00A175CFA64534F2154ECB1B /* SpaceDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */; };
 		5E2C9F3D5DCE597D8C26C312 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7F383F01B12E2D008A631C /* AppDelegate.swift */; };
+		6D42EA1C299F86C8FB76C6F7 /* NameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347F5AEBA3C593D5C5CBAF5C /* NameStore.swift */; };
 		8F36C302394E588DDECFC914 /* PrivateAPIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */; };
+		BC1782517D0DC5D58FB34EAE /* NameStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,6 +28,8 @@
 		0CCC0C35285E6FC34FEF9CC5 /* VirtualDesktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualDesktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1026DF019CD4FCC16F1AC18B /* VirtualDesktopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirtualDesktopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateAPIs.swift; sourceTree = "<group>"; };
+		347F5AEBA3C593D5C5CBAF5C /* NameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameStore.swift; sourceTree = "<group>"; };
+		3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameStoreTests.swift; sourceTree = "<group>"; };
 		4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceDetectorTests.swift; sourceTree = "<group>"; };
 		510CF64BBA085656EC9F5C29 /* VirtualDesktop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VirtualDesktop.entitlements; sourceTree = "<group>"; };
 		99396108361368820FE87EA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -53,6 +57,7 @@
 		A03CF3D1D3B5EF8ECD29892E /* VirtualDesktopTests */ = {
 			isa = PBXGroup;
 			children = (
+				3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */,
 				4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */,
 			);
 			path = VirtualDesktopTests;
@@ -61,6 +66,7 @@
 		C236292DCDD0A59B4A4D5139 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				347F5AEBA3C593D5C5CBAF5C /* NameStore.swift */,
 				1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */,
 			);
 			path = Services;
@@ -161,6 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E2C9F3D5DCE597D8C26C312 /* AppDelegate.swift in Sources */,
+				6D42EA1C299F86C8FB76C6F7 /* NameStore.swift in Sources */,
 				8F36C302394E588DDECFC914 /* PrivateAPIs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -169,6 +176,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC1782517D0DC5D58FB34EAE /* NameStoreTests.swift in Sources */,
 				00A175CFA64534F2154ECB1B /* SpaceDetectorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
