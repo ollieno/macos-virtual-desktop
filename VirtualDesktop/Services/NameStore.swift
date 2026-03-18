@@ -15,9 +15,11 @@ final class NameStore {
         return names[spaceID] ?? "Desktop \(index + 1)"
     }
 
+    /// Formatted for the menu bar: "1:Code" or "3:Desktop 3"
     func displayName(forSpaceID spaceID: String, atIndex index: Int) -> String {
         let full = name(forSpaceID: spaceID, atIndex: index)
-        return Self.truncate(full)
+        let numbered = "\(index + 1):\(full)"
+        return Self.truncate(numbered)
     }
 
     func setName(_ name: String, forSpaceID spaceID: String) {

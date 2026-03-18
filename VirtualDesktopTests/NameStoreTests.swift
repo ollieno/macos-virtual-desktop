@@ -39,7 +39,9 @@ final class NameStoreTests: XCTestCase {
         let longName = "This Is A Very Long Desktop Name That Exceeds Twenty Characters"
         store.setName(longName, forSpaceID: "uuid-789")
         let displayName = store.displayName(forSpaceID: "uuid-789", atIndex: 0)
+        // Format: "1:This Is A Very Lo…" (20 chars total including prefix)
         XCTAssertEqual(displayName.count, 20)
+        XCTAssertTrue(displayName.hasPrefix("1:"))
         XCTAssertTrue(displayName.hasSuffix("…"))
     }
 
@@ -53,7 +55,7 @@ final class NameStoreTests: XCTestCase {
     func testShortNameNotTruncated() {
         store.setName("Code", forSpaceID: "uuid-abc")
         let displayName = store.displayName(forSpaceID: "uuid-abc", atIndex: 0)
-        XCTAssertEqual(displayName, "Code")
+        XCTAssertEqual(displayName, "1:Code")
     }
 
     func testAllNames() {

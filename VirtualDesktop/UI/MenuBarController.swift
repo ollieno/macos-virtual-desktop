@@ -88,7 +88,8 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         for space in spaces {
             let name = nameStore.name(forSpaceID: space.uuid, atIndex: space.index)
-            let item = NSMenuItem(title: name, action: #selector(renameClicked(_:)), keyEquivalent: "")
+            let title = "\(space.index + 1):\(name)"
+            let item = NSMenuItem(title: title, action: #selector(renameClicked(_:)), keyEquivalent: "")
             item.target = self
             item.representedObject = ["uuid": space.uuid, "index": space.index] as [String: Any]
 
