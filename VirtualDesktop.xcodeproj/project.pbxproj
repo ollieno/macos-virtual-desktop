@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E126D6B3B3AD3F3DEA74FD0 /* VirtualDesktopTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA555A3A4909488F4E2BFC2 /* VirtualDesktopTests.swift */; };
+		00A175CFA64534F2154ECB1B /* SpaceDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */; };
 		5E2C9F3D5DCE597D8C26C312 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7F383F01B12E2D008A631C /* AppDelegate.swift */; };
+		8F36C302394E588DDECFC914 /* PrivateAPIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,7 +25,8 @@
 /* Begin PBXFileReference section */
 		0CCC0C35285E6FC34FEF9CC5 /* VirtualDesktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualDesktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1026DF019CD4FCC16F1AC18B /* VirtualDesktopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirtualDesktopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4AA555A3A4909488F4E2BFC2 /* VirtualDesktopTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualDesktopTests.swift; sourceTree = "<group>"; };
+		1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateAPIs.swift; sourceTree = "<group>"; };
+		4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceDetectorTests.swift; sourceTree = "<group>"; };
 		510CF64BBA085656EC9F5C29 /* VirtualDesktop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VirtualDesktop.entitlements; sourceTree = "<group>"; };
 		99396108361368820FE87EA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FA7F383F01B12E2D008A631C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -51,9 +53,17 @@
 		A03CF3D1D3B5EF8ECD29892E /* VirtualDesktopTests */ = {
 			isa = PBXGroup;
 			children = (
-				4AA555A3A4909488F4E2BFC2 /* VirtualDesktopTests.swift */,
+				4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */,
 			);
 			path = VirtualDesktopTests;
+			sourceTree = "<group>";
+		};
+		C236292DCDD0A59B4A4D5139 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		D6ADB8EBB21BAE54AABB2D6B /* VirtualDesktop */ = {
@@ -62,6 +72,7 @@
 				99396108361368820FE87EA6 /* Info.plist */,
 				510CF64BBA085656EC9F5C29 /* VirtualDesktop.entitlements */,
 				045018E0FC2771F90A221368 /* App */,
+				C236292DCDD0A59B4A4D5139 /* Services */,
 			);
 			path = VirtualDesktop;
 			sourceTree = "<group>";
@@ -150,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E2C9F3D5DCE597D8C26C312 /* AppDelegate.swift in Sources */,
+				8F36C302394E588DDECFC914 /* PrivateAPIs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,7 +169,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E126D6B3B3AD3F3DEA74FD0 /* VirtualDesktopTests.swift in Sources */,
+				00A175CFA64534F2154ECB1B /* SpaceDetectorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +189,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -330,6 +343,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
