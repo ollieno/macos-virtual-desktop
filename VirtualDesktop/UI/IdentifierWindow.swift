@@ -65,9 +65,7 @@ private final class IdentifierPanel: NSPanel {
         let y = screenFrame.midY - size.height / 2
         setFrameOrigin(NSPoint(x: x, y: y))
 
-        orderFront(nil)
-        // Push behind all other normal windows
-        order(.below, relativeTo: 0)
+        orderBack(nil)
     }
 }
 
