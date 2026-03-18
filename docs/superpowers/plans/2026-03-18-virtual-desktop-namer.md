@@ -34,6 +34,8 @@ VirtualDesktop/
     └── SpaceDetectorTests.swift
 ```
 
+**Note on testing:** The PrivateAPI and SpaceDetector tests are integration tests that require a running macOS GUI session with Screen Recording permission granted to Terminal/xcodebuild. Grant this in System Settings > Privacy & Security > Screen Recording before running tests. These tests will not work in headless CI.
+
 ---
 
 ## Task 1: Create Xcode Project Skeleton
@@ -58,6 +60,14 @@ options:
   deploymentTarget:
     macOS: "15.0"
   xcodeVersion: "16.0"
+schemes:
+  VirtualDesktop:
+    build:
+      targets:
+        VirtualDesktop: all
+    test:
+      targets:
+        - VirtualDesktopTests
 targets:
   VirtualDesktop:
     type: application
@@ -71,6 +81,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.jeroen.VirtualDesktop
         MACOSX_DEPLOYMENT_TARGET: "15.0"
         SWIFT_VERSION: "5.10"
+      debug:
+        ENABLE_TESTABILITY: "YES"
   VirtualDesktopTests:
     type: bundle.unit-test
     platform: macOS
@@ -118,7 +130,6 @@ Create `VirtualDesktop/Info.plist`:
     <true/>
     <key>NSHumanReadableCopyright</key>
     <string>Copyright 2026 Jeroen. All rights reserved.</string>
-</dict>
 </dict>
 </plist>
 ```
@@ -380,6 +391,35 @@ final class NameStoreTests: XCTestCase {
         let name = store.name(forSpaceID: "uuid-1", atIndex: 0)
         XCTAssertEqual(name, "Desktop 1")
     }
+
+    func testMigrateNamesPositionally() {
+        // Simulate: user had 3 desktops with names, then UUIDs changed
+        store.setName("Code", forSpaceID: "old-uuid-1")
+        store.setName("Email", forSpaceID: "old-uuid-2")
+        store.setName("Design", forSpaceID: "old-uuid-3")
+
+        let oldUUIDs = ["old-uuid-1", "old-uuid-2", "old-uuid-3"]
+        let newUUIDs = ["new-uuid-1", "new-uuid-2", "new-uuid-3"]
+
+        let migrated = store.migrateNames(from: oldUUIDs, to: newUUIDs)
+        XCTAssertEqual(migrated.count, 3)
+        XCTAssertEqual(store.name(forSpaceID: "new-uuid-1", atIndex: 0), "Code")
+        XCTAssertEqual(store.name(forSpaceID: "new-uuid-2", atIndex: 1), "Email")
+        XCTAssertEqual(store.name(forSpaceID: "new-uuid-3", atIndex: 2), "Design")
+    }
+
+    func testMigrateSkipsUnnamedSpaces() {
+        store.setName("Code", forSpaceID: "old-uuid-1")
+        // old-uuid-2 has no custom name
+
+        let oldUUIDs = ["old-uuid-1", "old-uuid-2"]
+        let newUUIDs = ["new-uuid-1", "new-uuid-2"]
+
+        let migrated = store.migrateNames(from: oldUUIDs, to: newUUIDs)
+        XCTAssertEqual(migrated.count, 1)
+        XCTAssertEqual(store.name(forSpaceID: "new-uuid-1", atIndex: 0), "Code")
+        XCTAssertEqual(store.name(forSpaceID: "new-uuid-2", atIndex: 1), "Desktop 2")
+    }
 }
 ```
 
@@ -434,6 +474,25 @@ final class NameStore {
 
     func allNames() -> [String: String] {
         defaults.dictionary(forKey: Self.storageKey) as? [String: String] ?? [:]
+    }
+
+    /// Migrates names from old UUIDs to new UUIDs based on position.
+    /// Returns the list of migrated name pairs for user confirmation.
+    @discardableResult
+    func migrateNames(from oldUUIDs: [String], to newUUIDs: [String]) -> [(name: String, newUUID: String)] {
+        let names = allNames()
+        var migrated: [(name: String, newUUID: String)] = []
+
+        for (i, oldUUID) in oldUUIDs.enumerated() {
+            guard i < newUUIDs.count,
+                  let name = names[oldUUID] else { continue }
+            let newUUID = newUUIDs[i]
+            setName(name, forSpaceID: newUUID)
+            removeName(forSpaceID: oldUUID)
+            migrated.append((name: name, newUUID: newUUID))
+        }
+
+        return migrated
     }
 
     // MARK: - Private
@@ -642,6 +701,7 @@ git commit -m "feat: add SpaceDetector with Space enumeration and change trackin
 Create `VirtualDesktop/UI/RenamePopover.swift`:
 
 ```swift
+import Cocoa
 import SwiftUI
 
 struct RenamePopoverView: View {
@@ -741,170 +801,7 @@ git commit -m "feat: add SwiftUI rename popover for desktop naming"
 
 ---
 
-## Task 6: MenuBarController
-
-**Files:**
-- Create: `VirtualDesktop/UI/MenuBarController.swift`
-
-- [ ] **Step 1: Implement MenuBarController**
-
-Create `VirtualDesktop/UI/MenuBarController.swift`:
-
-```swift
-import Cocoa
-
-/// Manages the NSStatusItem (menu bar icon) and dropdown menu.
-final class MenuBarController {
-    private let statusItem: NSStatusItem
-    private let spaceDetector: SpaceDetector
-    private let nameStore: NameStore
-    private var spaceChangeObservation: NSObjectProtocol?
-
-    init(spaceDetector: SpaceDetector, nameStore: NameStore) {
-        self.spaceDetector = spaceDetector
-        self.nameStore = nameStore
-        self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-
-        setupStatusItem()
-        observeSpaceChanges()
-        updateTitle()
-    }
-
-    // MARK: - Setup
-
-    private func setupStatusItem() {
-        statusItem.button?.target = self
-        statusItem.button?.action = #selector(statusItemClicked)
-        statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
-    }
-
-    private func observeSpaceChanges() {
-        spaceChangeObservation = NotificationCenter.default.addObserver(
-            forName: SpaceDetector.activeSpaceDidChange,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.updateTitle()
-        }
-    }
-
-    // MARK: - Update
-
-    func updateTitle() {
-        let uuid = spaceDetector.activeSpaceUUID()
-        let index = spaceDetector.activeSpaceIndex()
-        let displayName = nameStore.displayName(forSpaceID: uuid, atIndex: index)
-        statusItem.button?.title = displayName
-    }
-
-    // MARK: - Menu
-
-    @objc private func statusItemClicked() {
-        let menu = buildMenu()
-        statusItem.menu = menu
-        statusItem.button?.performClick(nil)
-        // Reset menu so next click triggers action again
-        statusItem.menu = nil
-    }
-
-    private func buildMenu() -> NSMenu {
-        let menu = NSMenu()
-        let spaces = spaceDetector.allSpaces()
-        let activeID = spaceDetector.activeSpaceID()
-
-        for space in spaces {
-            let name = nameStore.name(forSpaceID: space.uuid, atIndex: space.index)
-            let item = NSMenuItem(title: name, action: nil, keyEquivalent: "")
-            item.representedObject = space.uuid
-
-            if space.id == activeID {
-                item.state = .on // checkmark
-            }
-
-            // Add "Rename..." submenu action
-            let renameItem = NSMenuItem(
-                title: "Rename...",
-                action: #selector(renameClicked(_:)),
-                keyEquivalent: ""
-            )
-            renameItem.target = self
-            renameItem.representedObject = space
-
-            let submenu = NSMenu()
-            submenu.addItem(renameItem)
-            item.submenu = submenu
-
-            menu.addItem(item)
-        }
-
-        menu.addItem(NSMenuItem.separator())
-
-        // Launch at Login toggle
-        let launchItem = NSMenuItem(
-            title: "Launch at Login",
-            action: #selector(toggleLaunchAtLogin(_:)),
-            keyEquivalent: ""
-        )
-        launchItem.target = self
-        launchItem.state = LaunchAtLogin.isEnabled ? .on : .off
-        menu.addItem(launchItem)
-
-        menu.addItem(NSMenuItem.separator())
-
-        let quitItem = NSMenuItem(title: "Quit VirtualDesktop", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
-        menu.addItem(quitItem)
-
-        return menu
-    }
-
-    // MARK: - Actions
-
-    @objc private func renameClicked(_ sender: NSMenuItem) {
-        guard let space = sender.representedObject as? SpaceInfo else { return }
-        let currentName = nameStore.name(forSpaceID: space.uuid, atIndex: space.index)
-
-        let popover = RenamePopover(
-            spaceUUID: space.uuid,
-            currentName: currentName,
-            onRename: { [weak self] uuid, newName in
-                self?.nameStore.setName(newName, forSpaceID: uuid)
-                self?.updateTitle()
-            }
-        )
-
-        guard let button = statusItem.button else { return }
-        popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-    }
-
-    @objc private func toggleLaunchAtLogin(_ sender: NSMenuItem) {
-        LaunchAtLogin.toggle()
-        sender.state = LaunchAtLogin.isEnabled ? .on : .off
-    }
-
-    deinit {
-        if let observation = spaceChangeObservation {
-            NotificationCenter.default.removeObserver(observation)
-        }
-    }
-}
-```
-
-Note: `LaunchAtLogin` is referenced here but implemented in Task 7.
-
-- [ ] **Step 2: Build to verify compilation (will fail until Task 7)**
-
-This step can be verified after Task 7. For now, proceed.
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add VirtualDesktop/UI/MenuBarController.swift
-git commit -m "feat: add MenuBarController with dropdown and rename popover"
-```
-
----
-
-## Task 7: Launch at Login
+## Task 6: Launch at Login
 
 **Files:**
 - Create: `VirtualDesktop/Services/LaunchAtLogin.swift`
@@ -952,6 +849,186 @@ Expected: BUILD SUCCEEDED
 ```bash
 git add VirtualDesktop/Services/LaunchAtLogin.swift
 git commit -m "feat: add launch-at-login via SMAppService"
+```
+
+---
+
+## Task 7: MenuBarController
+
+**Files:**
+- Create: `VirtualDesktop/UI/MenuBarController.swift`
+
+- [ ] **Step 1: Implement MenuBarController**
+
+Create `VirtualDesktop/UI/MenuBarController.swift`:
+
+```swift
+import Cocoa
+
+/// Manages the NSStatusItem (menu bar icon) and dropdown menu.
+/// Uses NSMenuDelegate to properly manage menu lifecycle.
+final class MenuBarController: NSObject, NSMenuDelegate {
+    private let statusItem: NSStatusItem
+    private let spaceDetector: SpaceDetector
+    private let nameStore: NameStore
+    private var spaceChangeObservation: NSObjectProtocol?
+    private var activePopover: RenamePopover?
+
+    init(spaceDetector: SpaceDetector, nameStore: NameStore) {
+        self.spaceDetector = spaceDetector
+        self.nameStore = nameStore
+        self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        super.init()
+
+        setupStatusItem()
+        observeSpaceChanges()
+        updateTitle()
+    }
+
+    // MARK: - Setup
+
+    private func setupStatusItem() {
+        let menu = buildMenu()
+        menu.delegate = self
+        statusItem.menu = menu
+    }
+
+    private func observeSpaceChanges() {
+        spaceChangeObservation = NotificationCenter.default.addObserver(
+            forName: SpaceDetector.activeSpaceDidChange,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateTitle()
+            self?.rebuildMenu()
+        }
+    }
+
+    // MARK: - Update
+
+    func updateTitle() {
+        let uuid = spaceDetector.activeSpaceUUID()
+        let index = spaceDetector.activeSpaceIndex()
+        let displayName = nameStore.displayName(forSpaceID: uuid, atIndex: index)
+        statusItem.button?.title = displayName
+    }
+
+    private func rebuildMenu() {
+        let menu = buildMenu()
+        menu.delegate = self
+        statusItem.menu = menu
+    }
+
+    // MARK: - Menu Building
+
+    private func buildMenu() -> NSMenu {
+        let menu = NSMenu()
+        let spaces = spaceDetector.allSpaces()
+        let activeID = spaceDetector.activeSpaceID()
+
+        for space in spaces {
+            let name = nameStore.name(forSpaceID: space.uuid, atIndex: space.index)
+            let item = NSMenuItem(title: name, action: nil, keyEquivalent: "")
+
+            if space.id == activeID {
+                item.state = .on // checkmark
+            }
+
+            // Add "Rename..." submenu action
+            let renameItem = NSMenuItem(
+                title: "Rename...",
+                action: #selector(renameClicked(_:)),
+                keyEquivalent: ""
+            )
+            renameItem.target = self
+            // Store uuid and index as a dictionary (NSMenuItem.representedObject needs ObjC-bridgeable type)
+            renameItem.representedObject = ["uuid": space.uuid, "index": space.index] as [String: Any]
+
+            let submenu = NSMenu()
+            submenu.addItem(renameItem)
+            item.submenu = submenu
+
+            menu.addItem(item)
+        }
+
+        menu.addItem(NSMenuItem.separator())
+
+        // Launch at Login toggle
+        let launchItem = NSMenuItem(
+            title: "Launch at Login",
+            action: #selector(toggleLaunchAtLogin(_:)),
+            keyEquivalent: ""
+        )
+        launchItem.target = self
+        launchItem.state = LaunchAtLogin.isEnabled ? .on : .off
+        menu.addItem(launchItem)
+
+        menu.addItem(NSMenuItem.separator())
+
+        let quitItem = NSMenuItem(title: "Quit VirtualDesktop", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        menu.addItem(quitItem)
+
+        return menu
+    }
+
+    // MARK: - NSMenuDelegate
+
+    func menuWillOpen(_ menu: NSMenu) {
+        // Rebuild menu items each time to reflect current state
+        rebuildMenu()
+    }
+
+    // MARK: - Actions
+
+    @objc private func renameClicked(_ sender: NSMenuItem) {
+        guard let info = sender.representedObject as? [String: Any],
+              let uuid = info["uuid"] as? String,
+              let index = info["index"] as? Int else { return }
+        let currentName = nameStore.name(forSpaceID: uuid, atIndex: index)
+
+        let popover = RenamePopover(
+            spaceUUID: uuid,
+            currentName: currentName,
+            onRename: { [weak self] uuid, newName in
+                self?.nameStore.setName(newName, forSpaceID: uuid)
+                self?.updateTitle()
+                self?.rebuildMenu()
+            }
+        )
+
+        // Keep a strong reference so the popover stays alive
+        activePopover = popover
+
+        guard let button = statusItem.button else { return }
+        popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+    }
+
+    @objc private func toggleLaunchAtLogin(_ sender: NSMenuItem) {
+        LaunchAtLogin.toggle()
+        sender.state = LaunchAtLogin.isEnabled ? .on : .off
+    }
+
+    deinit {
+        if let observation = spaceChangeObservation {
+            NotificationCenter.default.removeObserver(observation)
+        }
+    }
+}
+```
+
+- [ ] **Step 2: Build to verify compilation**
+
+```bash
+xcodebuild -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Debug build
+```
+
+Expected: BUILD SUCCEEDED
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add VirtualDesktop/UI/MenuBarController.swift
+git commit -m "feat: add MenuBarController with dropdown and rename popover"
 ```
 
 ---
