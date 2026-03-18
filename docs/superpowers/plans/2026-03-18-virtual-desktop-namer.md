@@ -45,7 +45,26 @@ VirtualDesktop/
 - Create: `VirtualDesktop/App/AppDelegate.swift`
 - Create: `VirtualDesktop/Info.plist`
 
-- [ ] **Step 1: Generate Xcode project**
+- [ ] **Step 1: Create .gitignore**
+
+Create `.gitignore` first so build artifacts are never committed:
+
+```gitignore
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# macOS
+.DS_Store
+
+# Swift Package Manager
+.build/
+.swiftpm/
+```
+
+- [ ] **Step 2: Generate Xcode project**
 
 Create a new macOS App project. We use Swift Package Manager with `swift package init` and then convert, but for a menu bar app it's simpler to create the project structure manually and use `xcodebuild`. However, the most reliable approach for a first-time macOS developer is to scaffold with a `Package.swift` that builds an executable.
 
@@ -101,7 +120,7 @@ If `xcodegen` is not installed, install it first:
 brew install xcodegen
 ```
 
-- [ ] **Step 2: Create Info.plist**
+- [ ] **Step 3: Create Info.plist**
 
 Create `VirtualDesktop/Info.plist`:
 
@@ -136,7 +155,7 @@ Create `VirtualDesktop/Info.plist`:
 
 Key: `LSUIElement = true` makes this a menu bar-only app (no Dock icon, no main window).
 
-- [ ] **Step 3: Create entitlements file**
+- [ ] **Step 4: Create entitlements file**
 
 Create `VirtualDesktop/VirtualDesktop.entitlements`:
 
@@ -153,7 +172,7 @@ Create `VirtualDesktop/VirtualDesktop.entitlements`:
 
 Note: Sandbox must be disabled for private API access.
 
-- [ ] **Step 4: Create minimal AppDelegate**
+- [ ] **Step 5: Create minimal AppDelegate**
 
 Create `VirtualDesktop/App/AppDelegate.swift`:
 
@@ -168,7 +187,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 ```
 
-- [ ] **Step 5: Generate project and verify it builds**
+- [ ] **Step 6: Generate project and verify it builds**
 
 ```bash
 cd /Users/jeroen/Development/MacOS/VirtualDesktop
@@ -178,7 +197,7 @@ xcodebuild -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configurati
 
 Expected: BUILD SUCCEEDED
 
-- [ ] **Step 6: Initialize git and commit**
+- [ ] **Step 7: Initialize git and commit**
 
 ```bash
 cd /Users/jeroen/Development/MacOS/VirtualDesktop
@@ -517,7 +536,7 @@ final class NameStore {
 xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Debug
 ```
 
-Expected: All 8 NameStore tests PASS
+Expected: All 10 NameStore tests PASS
 
 - [ ] **Step 5: Commit**
 
@@ -1072,7 +1091,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard !staleUUIDs.isEmpty else { return }
 
         // We have names for UUIDs that no longer exist. Attempt positional migration.
-        let orderedStaleUUIDs = staleUUIDs.sorted() // Stable ordering
         let newUUIDs = currentSpaces.map(\.uuid)
 
         let alert = NSAlert()
@@ -1084,7 +1102,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let response = alert.runModal()
         if response == .alertFirstButtonReturn {
-            nameStore.migrateNames(from: Array(staleUUIDs), to: newUUIDs)
+            nameStore.migrateNames(from: staleUUIDs.sorted(), to: newUUIDs)
         } else {
             // Clear all stale names
             for uuid in staleUUIDs {
@@ -1149,38 +1167,9 @@ git commit -m "feat: wire all components together in AppDelegate"
 
 ---
 
-## Task 9: Final Polish and .gitignore
+## Task 9: Final End-to-End Verification
 
-**Files:**
-- Create: `.gitignore`
-
-- [ ] **Step 1: Add .gitignore**
-
-Create `.gitignore`:
-
-```gitignore
-# Xcode
-build/
-DerivedData/
-*.xcuserstate
-xcuserdata/
-
-# macOS
-.DS_Store
-
-# Swift Package Manager
-.build/
-.swiftpm/
-```
-
-- [ ] **Step 2: Commit**
-
-```bash
-git add .gitignore
-git commit -m "chore: add .gitignore for Xcode and macOS artifacts"
-```
-
-- [ ] **Step 3: Full end-to-end manual test**
+- [ ] **Step 1: Full end-to-end manual test**
 
 Build and run:
 ```bash
