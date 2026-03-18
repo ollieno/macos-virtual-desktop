@@ -1,0 +1,40 @@
+name: VirtualDesktop
+options:
+  bundleIdPrefix: com.jeroen
+  deploymentTarget:
+    macOS: "15.0"
+  xcodeVersion: "16.0"
+schemes:
+  VirtualDesktop:
+    build:
+      targets:
+        VirtualDesktop: all
+    test:
+      targets:
+        - VirtualDesktopTests
+targets:
+  VirtualDesktop:
+    type: application
+    platform: macOS
+    sources:
+      - VirtualDesktop
+    settings:
+      base:
+        INFOPLIST_FILE: VirtualDesktop/Info.plist
+        CODE_SIGN_ENTITLEMENTS: VirtualDesktop/VirtualDesktop.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: com.jeroen.VirtualDesktop
+        MACOSX_DEPLOYMENT_TARGET: "15.0"
+        SWIFT_VERSION: "5.10"
+      debug:
+        ENABLE_TESTABILITY: "YES"
+  VirtualDesktopTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - VirtualDesktopTests
+    dependencies:
+      - target: VirtualDesktop
+    settings:
+      base:
+        BUNDLE_LOADER: $(TEST_HOST)
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/VirtualDesktop.app/Contents/MacOS/VirtualDesktop
