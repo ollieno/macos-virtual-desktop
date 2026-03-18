@@ -178,9 +178,11 @@ xcodebuild -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configurati
 
 Expected: BUILD SUCCEEDED
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Initialize git and commit**
 
 ```bash
+cd /Users/jeroen/Development/MacOS/VirtualDesktop
+git init
 git add -A
 git commit -m "feat: scaffold Xcode project for menu bar app"
 ```
@@ -223,7 +225,7 @@ final class PrivateAPITests: XCTestCase {
 - [ ] **Step 2: Run tests to verify they fail**
 
 ```bash
-xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktopTests -configuration Debug
+xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Debug
 ```
 
 Expected: FAIL (PrivateAPIs type does not exist)
@@ -293,7 +295,7 @@ enum PrivateAPIs {
 - [ ] **Step 4: Run tests to verify they pass**
 
 ```bash
-xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktopTests -configuration Debug
+xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Debug
 ```
 
 Expected: All 3 tests PASS. Note: these tests require Screen Recording permission for the test runner.
@@ -426,7 +428,7 @@ final class NameStoreTests: XCTestCase {
 - [ ] **Step 2: Run tests to verify they fail**
 
 ```bash
-xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktopTests -configuration Debug
+xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Debug
 ```
 
 Expected: FAIL (NameStore type does not exist)
@@ -512,7 +514,7 @@ final class NameStore {
 - [ ] **Step 4: Run tests to verify they pass**
 
 ```bash
-xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktopTests -configuration Debug
+xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Debug
 ```
 
 Expected: All 8 NameStore tests PASS
@@ -573,7 +575,7 @@ final class SpaceDetectorTests: XCTestCase {
 - [ ] **Step 2: Run tests to verify they fail**
 
 ```bash
-xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktopTests -configuration Debug
+xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Debug
 ```
 
 Expected: FAIL (SpaceDetector type does not exist)
@@ -677,7 +679,7 @@ final class SpaceDetector {
 - [ ] **Step 4: Run tests to verify they pass**
 
 ```bash
-xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktopTests -configuration Debug
+xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Debug
 ```
 
 Expected: All SpaceDetector and PrivateAPI tests PASS
@@ -888,9 +890,10 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     // MARK: - Setup
 
     private func setupStatusItem() {
-        let menu = buildMenu()
+        let menu = NSMenu()
         menu.delegate = self
         statusItem.menu = menu
+        populateMenu(menu)
     }
 
     private func observeSpaceChanges() {
@@ -900,7 +903,6 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             queue: .main
         ) { [weak self] _ in
             self?.updateTitle()
-            self?.rebuildMenu()
         }
     }
 
@@ -913,16 +915,10 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         statusItem.button?.title = displayName
     }
 
-    private func rebuildMenu() {
-        let menu = buildMenu()
-        menu.delegate = self
-        statusItem.menu = menu
-    }
-
     // MARK: - Menu Building
 
-    private func buildMenu() -> NSMenu {
-        let menu = NSMenu()
+    private func populateMenu(_ menu: NSMenu) {
+        menu.removeAllItems()
         let spaces = spaceDetector.allSpaces()
         let activeID = spaceDetector.activeSpaceID()
 
@@ -968,14 +964,13 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         let quitItem = NSMenuItem(title: "Quit VirtualDesktop", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         menu.addItem(quitItem)
 
-        return menu
     }
 
     // MARK: - NSMenuDelegate
 
     func menuWillOpen(_ menu: NSMenu) {
-        // Rebuild menu items each time to reflect current state
-        rebuildMenu()
+        // Refresh menu items in-place each time to reflect current state
+        populateMenu(menu)
     }
 
     // MARK: - Actions
@@ -992,7 +987,6 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             onRename: { [weak self] uuid, newName in
                 self?.nameStore.setName(newName, forSpaceID: uuid)
                 self?.updateTitle()
-                self?.rebuildMenu()
             }
         )
 
@@ -1054,14 +1048,48 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         spaceDetector = SpaceDetector()
         nameStore = NameStore()
-        menuBarController = MenuBarController(spaceDetector: spaceDetector, nameStore: nameStore)
-
-        spaceDetector.startObserving()
 
         // Verify private APIs are working
         let spaces = spaceDetector.allSpaces()
         if spaces.isEmpty {
             showPermissionAlert()
+            return
+        }
+
+        // Check for stale UUIDs and migrate names positionally if needed
+        migrateStaleNamesIfNeeded(currentSpaces: spaces)
+
+        menuBarController = MenuBarController(spaceDetector: spaceDetector, nameStore: nameStore)
+        spaceDetector.startObserving()
+    }
+
+    private func migrateStaleNamesIfNeeded(currentSpaces: [SpaceInfo]) {
+        let storedNames = nameStore.allNames()
+        guard !storedNames.isEmpty else { return }
+
+        let currentUUIDs = Set(currentSpaces.map(\.uuid))
+        let staleUUIDs = storedNames.keys.filter { !currentUUIDs.contains($0) }
+        guard !staleUUIDs.isEmpty else { return }
+
+        // We have names for UUIDs that no longer exist. Attempt positional migration.
+        let orderedStaleUUIDs = staleUUIDs.sorted() // Stable ordering
+        let newUUIDs = currentSpaces.map(\.uuid)
+
+        let alert = NSAlert()
+        alert.messageText = "Desktop names need updating"
+        alert.informativeText = "Your desktop UUIDs have changed (possibly after adding/removing desktops). VirtualDesktop can try to reassign your names based on desktop position. Migrate names?"
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "Migrate")
+        alert.addButton(withTitle: "Reset Names")
+
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            nameStore.migrateNames(from: Array(staleUUIDs), to: newUUIDs)
+        } else {
+            // Clear all stale names
+            for uuid in staleUUIDs {
+                nameStore.removeName(forSpaceID: uuid)
+            }
         }
     }
 
@@ -1107,7 +1135,7 @@ Manual verification checklist:
 - [ ] **Step 3: Run all tests**
 
 ```bash
-xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktopTests -configuration Debug
+xcodebuild test -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Debug
 ```
 
 Expected: All tests PASS
