@@ -90,7 +90,7 @@ final class OverlayController {
         fadeTimer?.invalidate()
 
         // Small delay so Mission Control animation finishes first
-        showTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
+        showTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { [weak self] _ in
             self?.showImmediately(name: name)
         }
     }
