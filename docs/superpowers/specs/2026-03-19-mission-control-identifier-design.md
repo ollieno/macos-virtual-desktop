@@ -16,7 +16,7 @@ A persistent label window per desktop that sits behind all other windows. In nor
 |----------|-------|-----------|
 | Size | 700 x 200 pt | Large enough to remain readable in Mission Control thumbnails (~15-20% scale) |
 | Position | Centered on screen | Maximum visibility in Mission Control |
-| Window level | Below normal (`.normal - 1` or `.desktopIcon + 1`) | Always behind app windows in normal use |
+| Window level | `.desktopIcon + 1` (CGWindowLevelKey raw value 1) | Just above desktop icons, below all app windows |
 | Mouse events | `ignoresMouseEvents = true` | Click-through so it never interferes with normal use |
 | Collection behavior | Default (no `canJoinAllSpaces`) | Each desktop gets its own window instance |
 
@@ -66,7 +66,7 @@ Follows the same architecture as `BorderWindow.swift`:
 | Aspect | BorderController | IdentifierController |
 |--------|-----------------|---------------------|
 | Collection behavior | `canJoinAllSpaces` | Default (per-desktop) |
-| Window level | `.statusBar` | Below `.normal` |
+| Window level | `.statusBar` | `.desktopIcon + 1` |
 | Content | 4pt border stroke | Centered label with background |
 | Size | Full screen | 700 x 200 pt centered |
 | Mouse events | Ignored | Ignored |
