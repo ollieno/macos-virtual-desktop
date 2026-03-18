@@ -11,7 +11,9 @@ private struct IdentifierView: View {
         Text(name)
             .font(.system(size: 48, weight: .heavy, design: .rounded))
             .foregroundColor(.white)
-            .frame(width: 700, height: 200)
+            .padding(.horizontal, 28)
+            .padding(.vertical, 20)
+            .frame(minWidth: 700, minHeight: 200)
             .background(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .fill(Color(red: 15/255, green: 15/255, blue: 20/255).opacity(0.85))
@@ -29,7 +31,7 @@ private struct IdentifierView: View {
 private final class IdentifierPanel: NSPanel {
     private var hostingView: NSHostingView<IdentifierView>?
 
-    init(screen: NSScreen) {
+    init() {
         super.init(
             contentRect: .zero,
             styleMask: [.borderless, .nonactivatingPanel],
@@ -55,7 +57,7 @@ private final class IdentifierPanel: NSPanel {
             hostingView = hv
         }
 
-        let size = NSSize(width: 700, height: 200)
+        let size = hostingView?.fittingSize ?? NSSize(width: 700, height: 200)
         setContentSize(size)
 
         let screenFrame = screen.frame
@@ -82,14 +84,17 @@ final class IdentifierController {
         let screens = NSScreen.screens
         let color = DesktopColors.color(forIndex: index)
 
+        // Ensure we have enough panels
         while panels.count < screens.count {
-            panels.append(IdentifierPanel(screen: screens[panels.count]))
+            panels.append(IdentifierPanel())
         }
 
+        // Update each screen
         for (i, screen) in screens.enumerated() {
             panels[i].update(name: name, color: color, on: screen)
         }
 
+        // Hide extra panels if screens were disconnected
         for i in screens.count..<panels.count {
             panels[i].orderOut(nil)
         }
