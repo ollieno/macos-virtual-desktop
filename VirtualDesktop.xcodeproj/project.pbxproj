@@ -17,7 +17,10 @@
 		B3EB34C5EAF8D7AB45CFB7B3 /* OverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */; };
 		BC1782517D0DC5D58FB34EAE /* NameStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */; };
 		BE99A3A033D8A3624283858B /* RenamePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B72B3C7E7E845BE27BE318C /* RenamePopover.swift */; };
+		C4A1B2D3E5F60718293A4B5C /* DesktopColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B2C3E4F6071829304B5C6D /* DesktopColors.swift */; };
+		E6C3D4F50819293A4B5C6D7E /* BorderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D4E5061A2B3C4D5E6F7081 /* BorderWindow.swift */; };
 		BEA66CC443F2F2EF726AE89B /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD917B7D72D1E5CF78A98B7 /* MenuBarController.swift */; };
+D4E5F60718293A4B5C6D7E8F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F607182930A1B2C3D4E5F6 /* Settings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +36,9 @@
 /* Begin PBXFileReference section */
 		0CCC0C35285E6FC34FEF9CC5 /* VirtualDesktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualDesktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1026DF019CD4FCC16F1AC18B /* VirtualDesktopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirtualDesktopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5B2C3E4F6071829304B5C6D /* DesktopColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopColors.swift; sourceTree = "<group>"; };
+		F7D4E5061A2B3C4D5E6F7081 /* BorderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderWindow.swift; sourceTree = "<group>"; };
+E5F607182930A1B2C3D4E5F6 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateAPIs.swift; sourceTree = "<group>"; };
 		1DD917B7D72D1E5CF78A98B7 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		347F5AEBA3C593D5C5CBAF5C /* NameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameStore.swift; sourceTree = "<group>"; };
@@ -70,8 +76,10 @@
 		4E715B9596125B7740711298 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				F7D4E5061A2B3C4D5E6F7081 /* BorderWindow.swift */,
+				D5B2C3E4F6071829304B5C6D /* DesktopColors.swift */,
 				1DD917B7D72D1E5CF78A98B7 /* MenuBarController.swift */,
-				EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
+EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 				3B72B3C7E7E845BE27BE318C /* RenamePopover.swift */,
 			);
 			path = UI;
@@ -92,6 +100,7 @@
 				7BAABB1F182D0D8C1D36FE12 /* LaunchAtLogin.swift */,
 				347F5AEBA3C593D5C5CBAF5C /* NameStore.swift */,
 				1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */,
+				E5F607182930A1B2C3D4E5F6 /* Settings.swift */,
 				925F3A015121EB5536E99DC3 /* SpaceDetector.swift */,
 			);
 			path = Services;
@@ -193,12 +202,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E2C9F3D5DCE597D8C26C312 /* AppDelegate.swift in Sources */,
+				E6C3D4F50819293A4B5C6D7E /* BorderWindow.swift in Sources */,
+				C4A1B2D3E5F60718293A4B5C /* DesktopColors.swift in Sources */,
 				AA3BA2C9FD012F4172ED05C2 /* LaunchAtLogin.swift in Sources */,
 				BEA66CC443F2F2EF726AE89B /* MenuBarController.swift in Sources */,
-				6D42EA1C299F86C8FB76C6F7 /* NameStore.swift in Sources */,
+6D42EA1C299F86C8FB76C6F7 /* NameStore.swift in Sources */,
 				B3EB34C5EAF8D7AB45CFB7B3 /* OverlayWindow.swift in Sources */,
 				8F36C302394E588DDECFC914 /* PrivateAPIs.swift in Sources */,
 				BE99A3A033D8A3624283858B /* RenamePopover.swift in Sources */,
+				D4E5F60718293A4B5C6D7E8F /* Settings.swift in Sources */,
 				3788A33F4A8CA80402C86A93 /* SpaceDetector.swift in Sources */,
 				8E35F01208BA38E13C65B6C0 /* main.swift in Sources */,
 			);

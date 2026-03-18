@@ -5,6 +5,7 @@ import SwiftUI
 
 private struct OverlayView: View {
     let name: String
+    let color: Color
 
     var body: some View {
         Text(name)
@@ -16,6 +17,10 @@ private struct OverlayView: View {
             .background(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(Color.black.opacity(0.75))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(color, lineWidth: 3)
             )
     }
 }
@@ -41,8 +46,8 @@ private final class OverlayPanel: NSPanel {
         alphaValue = 0
     }
 
-    func show(name: String, on screen: NSScreen) {
-        let view = OverlayView(name: name)
+    func show(name: String, color: Color, on screen: NSScreen) {
+        let view = OverlayView(name: name, color: color)
         if let existing = hostingView {
             existing.rootView = view
         } else {
@@ -84,19 +89,20 @@ final class OverlayController {
     private var fadeTimer: Timer?
     private var showTimer: Timer?
 
-    func show(name: String) {
+    func show(name: String, desktopIndex: Int) {
         // Cancel any pending show/fade
         showTimer?.invalidate()
         fadeTimer?.invalidate()
 
         // Small delay so Mission Control animation finishes first
         showTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { [weak self] _ in
-            self?.showImmediately(name: name)
+            self?.showImmediately(name: name, desktopIndex: desktopIndex)
         }
     }
 
-    private func showImmediately(name: String) {
+    private func showImmediately(name: String, desktopIndex: Int) {
         let screens = NSScreen.screens
+        let color = DesktopColors.color(forIndex: desktopIndex)
 
         // Ensure we have enough panels (reuse existing, create new if needed)
         while panels.count < screens.count {
@@ -105,7 +111,7 @@ final class OverlayController {
 
         // Show on each screen
         for (i, screen) in screens.enumerated() {
-            panels[i].show(name: name, on: screen)
+            panels[i].show(name: name, color: color, on: screen)
         }
 
         // Hide any extra panels (if screens were disconnected)

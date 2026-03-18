@@ -9,6 +9,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     private var clickTimer: Timer?
     private let menu: NSMenu
     private let overlay = OverlayController()
+    private let border = BorderController()
 
     init(spaceDetector: SpaceDetector, nameStore: NameStore) {
         self.spaceDetector = spaceDetector
@@ -21,6 +22,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         setupStatusItem()
         observeSpaceChanges()
         updateTitle()
+        updateBorder()
     }
 
     // MARK: - Setup
@@ -44,7 +46,8 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             let uuid = self.spaceDetector.activeSpaceUUID()
             let index = self.spaceDetector.activeSpaceIndex()
             let name = self.nameStore.displayName(forSpaceID: uuid, atIndex: index)
-            self.overlay.show(name: name)
+            self.overlay.show(name: name, desktopIndex: index)
+            self.updateBorder()
         }
     }
 
@@ -77,6 +80,15 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     }
 
     // MARK: - Update
+
+    private func updateBorder() {
+        let index = spaceDetector.activeSpaceIndex()
+        if Settings.showBorder {
+            border.update(index: index)
+        } else {
+            border.hide()
+        }
+    }
 
     func updateTitle() {
         let uuid = spaceDetector.activeSpaceUUID()
@@ -116,6 +128,15 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         launchItem.target = self
         launchItem.state = LaunchAtLogin.isEnabled ? .on : .off
         menu.addItem(launchItem)
+
+        let borderItem = NSMenuItem(
+            title: "Show Border Colors",
+            action: #selector(toggleBorderColors(_:)),
+            keyEquivalent: ""
+        )
+        borderItem.target = self
+        borderItem.state = Settings.showBorder ? .on : .off
+        menu.addItem(borderItem)
 
         menu.addItem(NSMenuItem.separator())
 
@@ -159,6 +180,12 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     @objc private func toggleLaunchAtLogin(_ sender: NSMenuItem) {
         LaunchAtLogin.toggle()
         sender.state = LaunchAtLogin.isEnabled ? .on : .off
+    }
+
+    @objc private func toggleBorderColors(_ sender: NSMenuItem) {
+        Settings.toggleBorder()
+        sender.state = Settings.showBorder ? .on : .off
+        updateBorder()
     }
 
     deinit {
