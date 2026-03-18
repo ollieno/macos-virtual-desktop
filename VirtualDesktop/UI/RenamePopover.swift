@@ -7,15 +7,14 @@ struct RenamePopoverView: View {
     let onCancel: () -> Void
 
     @State private var newName: String = ""
+    @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
         VStack(spacing: 12) {
-            Text("Rename Desktop")
-                .font(.headline)
-
             TextField("Desktop name", text: $newName)
                 .textFieldStyle(.roundedBorder)
                 .frame(width: 200)
+                .focused($isTextFieldFocused)
                 .onSubmit {
                     submitName()
                 }
@@ -36,6 +35,10 @@ struct RenamePopoverView: View {
         .padding(16)
         .onAppear {
             newName = currentName
+            // Auto-focus and select all text
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                isTextFieldFocused = true
+            }
         }
     }
 

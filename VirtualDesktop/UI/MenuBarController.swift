@@ -55,23 +55,13 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         for space in spaces {
             let name = nameStore.name(forSpaceID: space.uuid, atIndex: space.index)
-            let item = NSMenuItem(title: name, action: nil, keyEquivalent: "")
+            let item = NSMenuItem(title: name, action: #selector(renameClicked(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = ["uuid": space.uuid, "index": space.index] as [String: Any]
 
             if space.id == activeID {
                 item.state = .on
             }
-
-            let renameItem = NSMenuItem(
-                title: "Rename...",
-                action: #selector(renameClicked(_:)),
-                keyEquivalent: ""
-            )
-            renameItem.target = self
-            renameItem.representedObject = ["uuid": space.uuid, "index": space.index] as [String: Any]
-
-            let submenu = NSMenu()
-            submenu.addItem(renameItem)
-            item.submenu = submenu
 
             menu.addItem(item)
         }
