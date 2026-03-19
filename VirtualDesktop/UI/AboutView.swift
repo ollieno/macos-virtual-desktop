@@ -61,14 +61,18 @@ final class AboutWindowController {
 
     func showAbout() {
         if window == nil {
+            let hostingView = NSHostingView(rootView: AboutView())
+            hostingView.translatesAutoresizingMaskIntoConstraints = false
+            let fittingSize = hostingView.fittingSize
+
             let w = NSWindow(
-                contentRect: .zero,
+                contentRect: NSRect(origin: .zero, size: fittingSize),
                 styleMask: [.titled, .closable],
                 backing: .buffered,
                 defer: false
             )
             w.title = "About VirtualDesktop"
-            w.contentView = NSHostingView(rootView: AboutView())
+            w.contentView = hostingView
             w.isReleasedWhenClosed = false
             window = w
         }
