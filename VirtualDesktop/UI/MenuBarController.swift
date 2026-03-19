@@ -11,6 +11,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     private let overlay = OverlayController()
     private let border = BorderController()
     private let identifier = IdentifierController()
+    private let aboutController = AboutWindowController()
 
     init(spaceDetector: SpaceDetector, nameStore: NameStore) {
         self.spaceDetector = spaceDetector
@@ -115,6 +116,14 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
     private func populateMenu(_ menu: NSMenu) {
         menu.removeAllItems()
+        let aboutItem = NSMenuItem(
+            title: "About VirtualDesktop",
+            action: #selector(showAbout(_:)),
+            keyEquivalent: ""
+        )
+        aboutItem.target = self
+        menu.addItem(aboutItem)
+        menu.addItem(NSMenuItem.separator())
         let spaces = spaceDetector.allSpaces()
         let activeID = spaceDetector.activeSpaceID()
 
@@ -168,6 +177,10 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     }
 
     // MARK: - Actions
+
+    @objc private func showAbout(_ sender: NSMenuItem) {
+        aboutController.showAbout()
+    }
 
     private func renameCurrentDesktop() {
         let uuid = spaceDetector.activeSpaceUUID()

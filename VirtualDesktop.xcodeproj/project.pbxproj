@@ -22,6 +22,7 @@
 		C4A1B2D3E5F60718293A4B5C /* DesktopColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B2C3E4F6071829304B5C6D /* DesktopColors.swift */; };
 		E6C3D4F50819293A4B5C6D7E /* BorderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D4E5061A2B3C4D5E6F7081 /* BorderWindow.swift */; };
 		A9B1C2D3E4F506172839A0B1 /* IdentifierWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C1D2E3F405162738495A6B /* IdentifierWindow.swift */; };
+		5C2DC5F6414D4D658B93C24A /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE9C371A7A7454E9F8D9FE0 /* AboutView.swift */; };
 		BEA66CC443F2F2EF726AE89B /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD917B7D72D1E5CF78A98B7 /* MenuBarController.swift */; };
 D4E5F60718293A4B5C6D7E8F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F607182930A1B2C3D4E5F6 /* Settings.swift */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@ D4E5F60718293A4B5C6D7E8F /* Settings.swift in Sources */ = {isa = PBXBuildFile; 
 		B0C1D2E3F405162738495A6B /* IdentifierWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifierWindow.swift; sourceTree = "<group>"; };
 E5F607182930A1B2C3D4E5F6 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateAPIs.swift; sourceTree = "<group>"; };
+		6AE9C371A7A7454E9F8D9FE0 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		1DD917B7D72D1E5CF78A98B7 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		347F5AEBA3C593D5C5CBAF5C /* NameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameStore.swift; sourceTree = "<group>"; };
 		3B72B3C7E7E845BE27BE318C /* RenamePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenamePopover.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@ E5F607182930A1B2C3D4E5F6 /* Settings.swift */ = {isa = PBXFileReference; lastKno
 		4E715B9596125B7740711298 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				6AE9C371A7A7454E9F8D9FE0 /* AboutView.swift */,
 				F7D4E5061A2B3C4D5E6F7081 /* BorderWindow.swift */,
 				D5B2C3E4F6071829304B5C6D /* DesktopColors.swift */,
 				B0C1D2E3F405162738495A6B /* IdentifierWindow.swift */,
@@ -222,6 +225,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C2DC5F6414D4D658B93C24A /* AboutView.swift in Sources */,
 				5E2C9F3D5DCE597D8C26C312 /* AppDelegate.swift in Sources */,
 				E6C3D4F50819293A4B5C6D7E /* BorderWindow.swift in Sources */,
 				A9B1C2D3E4F506172839A0B1 /* IdentifierWindow.swift in Sources */,
