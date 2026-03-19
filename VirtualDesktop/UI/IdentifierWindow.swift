@@ -20,7 +20,7 @@ private struct IdentifierView: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(color, lineWidth: 3)
+                    .stroke(color, lineWidth: 6)
             )
             .shadow(color: .black.opacity(0.3), radius: 10, y: 4)
     }
