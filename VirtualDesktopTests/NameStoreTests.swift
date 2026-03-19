@@ -88,6 +88,15 @@ final class NameStoreTests: XCTestCase {
         XCTAssertEqual(store.name(forSpaceID: "new-uuid-3", atIndex: 2), "Design")
     }
 
+    func testResetAllNames() {
+        store.setName("Code", forSpaceID: "uuid-1")
+        store.setName("Email", forSpaceID: "uuid-2")
+        store.resetAllNames()
+        XCTAssertEqual(store.allNames(), [:])
+        XCTAssertEqual(store.name(forSpaceID: "uuid-1", atIndex: 0), "Desktop 1")
+        XCTAssertEqual(store.name(forSpaceID: "uuid-2", atIndex: 1), "Desktop 2")
+    }
+
     func testMigrateSkipsUnnamedSpaces() {
         store.setName("Code", forSpaceID: "old-uuid-1")
 

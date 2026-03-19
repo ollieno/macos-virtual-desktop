@@ -38,6 +38,10 @@ final class NameStore {
         defaults.dictionary(forKey: Self.storageKey) as? [String: String] ?? [:]
     }
 
+    func resetAllNames() {
+        save([:])
+    }
+
     @discardableResult
     func migrateNames(from oldUUIDs: [String], to newUUIDs: [String]) -> [(name: String, newUUID: String)] {
         let names = allNames()

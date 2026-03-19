@@ -170,6 +170,14 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         identifierItem.state = Settings.showIdentifier ? .on : .off
         menu.addItem(identifierItem)
 
+        let resetItem = NSMenuItem(
+            title: "Reset Desktop Names",
+            action: #selector(resetDesktopNames(_:)),
+            keyEquivalent: ""
+        )
+        resetItem.target = self
+        menu.addItem(resetItem)
+
         menu.addItem(NSMenuItem.separator())
 
         let quitItem = NSMenuItem(title: "Quit VirtualDesktop", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
@@ -212,6 +220,19 @@ final class MenuBarController: NSObject, NSMenuDelegate {
 
         guard let button = statusItem.button else { return }
         popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+    }
+
+    @objc private func resetDesktopNames(_ sender: NSMenuItem) {
+        let alert = NSAlert()
+        alert.messageText = "Reset Desktop Names"
+        alert.informativeText = "All desktops will be renamed back to their default names (Desktop 1, Desktop 2, etc.)."
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Reset")
+        alert.addButton(withTitle: "Cancel")
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        nameStore.resetAllNames()
+        updateTitle()
+        updateIdentifier()
     }
 
     @objc private func toggleLaunchAtLogin(_ sender: NSMenuItem) {
