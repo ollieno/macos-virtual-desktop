@@ -38,7 +38,7 @@ Standard macOS About window aesthetic: centered layout, light/dark mode compatib
 ### Integration
 
 - `MenuBarController` gets an "About VirtualDesktop" item at position 0, followed by a separator.
-- The About window is managed as a singleton to prevent multiple instances.
+- The About window reference is held by `MenuBarController` as a singleton to prevent multiple instances.
 
 ## 2. README
 
@@ -70,18 +70,21 @@ English.
 - Xcode (with command line tools)
 - `create-dmg` (installed via `brew install create-dmg`)
 
+Note: the `.xcodeproj` is committed to the repo, so `xcodegen` is not required to build.
+
 ### Steps
 
-1. Clean and build the app with `xcodebuild` in Release configuration.
-2. Copy the built `.app` bundle to a staging directory.
-3. Copy `README.rtf` to the staging directory.
-4. Run `create-dmg` to produce the DMG with:
+1. Check prerequisites (`xcodebuild`, `create-dmg`). Exit with a clear error if missing.
+2. Clean and build the app with `xcodebuild -project VirtualDesktop.xcodeproj -scheme VirtualDesktop -configuration Release`. Set `CODE_SIGN_IDENTITY=""` and `CODE_SIGNING_ALLOWED=NO` to ensure builds succeed without a signing identity.
+3. Copy the built `.app` bundle to a staging directory.
+4. Copy `README.rtf` to the staging directory. (This file lives at the repo root and is not part of the Xcode target.)
+5. Run `create-dmg` to produce the DMG with:
    - The `.app` bundle
    - A symlink to `/Applications`
    - The README file
    - Window size and icon positions configured for a clean layout
    - App icon as DMG volume icon
-5. Output: `build/VirtualDesktop-1.0.0.dmg`
+6. Output: `build/VirtualDesktop-1.0.0.dmg`
 
 ### Version
 
@@ -93,7 +96,7 @@ The script reads the version from the app's Info.plist to name the DMG file.
 |------|--------|---------|
 | `VirtualDesktop/UI/AboutView.swift` | Add | SwiftUI About screen |
 | `VirtualDesktop/UI/MenuBarController.swift` | Modify | Add "About" menu item |
-| `README.rtf` | Add | User-facing documentation in DMG |
+| `README.rtf` | Add | User-facing documentation in DMG (repo root, not in Xcode target) |
 | `scripts/build-dmg.sh` | Add | DMG build automation |
 
 ## Out of Scope
