@@ -6,6 +6,32 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 BUILD_DIR="$PROJECT_DIR/build"
 STAGING_DIR="$BUILD_DIR/staging"
 APP_NAME="VirtualDesktop"
+PLIST="$PROJECT_DIR/$APP_NAME/Info.plist"
+
+# Optional version bump: ./build-dmg.sh 1.2.0
+if [ "${1:-}" != "" ]; then
+    NEW_VERSION="$1"
+
+    # Validate semver format
+    if ! [[ "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        echo "Error: Version must be in X.Y.Z format (e.g. 1.2.0)" >&2
+        exit 1
+    fi
+
+    # Read and increment build number
+    OLD_BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST")
+    NEW_BUILD=$((OLD_BUILD + 1))
+
+    # Update Info.plist
+    /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString $NEW_VERSION" "$PLIST"
+    /usr/libexec/PlistBuddy -c "Set CFBundleVersion $NEW_BUILD" "$PLIST"
+
+    echo "Version bumped to $NEW_VERSION (Build $NEW_BUILD)"
+
+    # Commit the version bump
+    git -C "$PROJECT_DIR" add "$PLIST"
+    git -C "$PROJECT_DIR" commit -m "release: bump version to $NEW_VERSION (build $NEW_BUILD)"
+fi
 
 # Check prerequisites
 if ! command -v xcodebuild &> /dev/null; then
@@ -58,11 +84,12 @@ create-dmg \
     --volname "$APP_NAME" \
     "${VOLICON_ARGS[@]}" \
     --window-pos 200 120 \
-    --window-size 600 400 \
-    --icon-size 80 \
-    --icon "$APP_NAME.app" 160 190 \
-    --app-drop-link 440 190 \
-    --icon "README.rtf" 300 340 \
+    --window-size 500 340 \
+    --icon-size 100 \
+    --icon "$APP_NAME.app" 130 150 \
+    --app-drop-link 370 150 \
+    --icon "README.rtf" 250 290 \
+    --icon ".VolumeIcon.icns" 900 900 \
     --hide-extension "$APP_NAME.app" \
     --no-internet-enable \
     "$DMG_PATH" \
