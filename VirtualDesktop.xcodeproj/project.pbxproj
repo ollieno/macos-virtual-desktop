@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00A175CFA64534F2154ECB1B /* SpaceDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */; };
+		C7D8E9F0A1B2C3D4E5F60718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8B9C0D1E2F3041526374859 /* Assets.xcassets */; };
 		3788A33F4A8CA80402C86A93 /* SpaceDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F3A015121EB5536E99DC3 /* SpaceDetector.swift */; };
 		5E2C9F3D5DCE597D8C26C312 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7F383F01B12E2D008A631C /* AppDelegate.swift */; };
 		6D42EA1C299F86C8FB76C6F7 /* NameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347F5AEBA3C593D5C5CBAF5C /* NameStore.swift */; };
@@ -55,6 +56,7 @@ E5F607182930A1B2C3D4E5F6 /* Settings.swift */ = {isa = PBXFileReference; lastKno
 		99396108361368820FE87EA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E22A6A71DAE7F03AC32943B7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindow.swift; sourceTree = "<group>"; };
+		A8B9C0D1E2F3041526374859 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA7F383F01B12E2D008A631C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -115,6 +117,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 		D6ADB8EBB21BAE54AABB2D6B /* VirtualDesktop */ = {
 			isa = PBXGroup;
 			children = (
+				A8B9C0D1E2F3041526374859 /* Assets.xcassets */,
 				99396108361368820FE87EA6 /* Info.plist */,
 				510CF64BBA085656EC9F5C29 /* VirtualDesktop.entitlements */,
 				045018E0FC2771F90A221368 /* App */,
@@ -158,6 +161,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 			isa = PBXNativeTarget;
 			buildConfigurationList = 96D154BD7AFD18F2A14AE95B /* Build configuration list for PBXNativeTarget "VirtualDesktop" */;
 			buildPhases = (
+				D1E2F3041526374859A0B1C2 /* Resources */,
 				19015B353B05CD26D2A38B5E /* Sources */,
 			);
 			buildRules = (
@@ -201,6 +205,17 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D1E2F3041526374859A0B1C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7D8E9F0A1B2C3D4E5F60718 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		19015B353B05CD26D2A38B5E /* Sources */ = {
