@@ -8,7 +8,9 @@ STAGING_DIR="$BUILD_DIR/staging"
 APP_NAME="VirtualDesktop"
 PLIST="$PROJECT_DIR/$APP_NAME/Info.plist"
 
-# Optional version bump: ./build-dmg.sh 1.2.0
+CURRENT_VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$PLIST")
+CURRENT_BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST")
+
 if [ "${1:-}" != "" ]; then
     NEW_VERSION="$1"
 
@@ -18,9 +20,13 @@ if [ "${1:-}" != "" ]; then
         exit 1
     fi
 
-    # Read and increment build number
-    OLD_BUILD=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST")
-    NEW_BUILD=$((OLD_BUILD + 1))
+    if [ "$NEW_VERSION" = "$CURRENT_VERSION" ]; then
+        echo "Error: Version $NEW_VERSION is already the current version. Use a newer version number." >&2
+        exit 1
+    fi
+
+    # Increment build number
+    NEW_BUILD=$((CURRENT_BUILD + 1))
 
     # Update Info.plist
     /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString $NEW_VERSION" "$PLIST"
@@ -31,6 +37,10 @@ if [ "${1:-}" != "" ]; then
     # Commit the version bump
     git -C "$PROJECT_DIR" add "$PLIST"
     git -C "$PROJECT_DIR" commit -m "release: bump version to $NEW_VERSION (build $NEW_BUILD)"
+else
+    echo "Building version $CURRENT_VERSION (Build $CURRENT_BUILD)"
+    echo "Tip: to release a new version, run: ./scripts/build-dmg.sh X.Y.Z"
+    echo ""
 fi
 
 # Check prerequisites
