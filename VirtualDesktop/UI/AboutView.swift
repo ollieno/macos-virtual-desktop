@@ -1,3 +1,4 @@
+import Cocoa
 import SwiftUI
 
 struct AboutView: View {
@@ -59,26 +60,20 @@ final class AboutWindowController {
     private var window: NSWindow?
 
     func showAbout() {
-        if let existing = window, existing.isVisible {
-            existing.makeKeyAndOrderFront(nil)
-            return
+        if window == nil {
+            let w = NSWindow(
+                contentRect: .zero,
+                styleMask: [.titled, .closable],
+                backing: .buffered,
+                defer: false
+            )
+            w.title = "About VirtualDesktop"
+            w.contentView = NSHostingView(rootView: AboutView())
+            w.isReleasedWhenClosed = false
+            window = w
         }
-
-        let window = NSWindow(
-            contentRect: .zero,
-            styleMask: [.titled, .closable],
-            backing: .buffered,
-            defer: false
-        )
-        window.title = "About VirtualDesktop"
-        window.contentView = NSHostingView(rootView: AboutView())
-        window.isReleasedWhenClosed = false
-        window.center()
-        window.makeKeyAndOrderFront(nil)
-
-        // Bring app to front (it's an LSUIElement app)
+        window?.center()
+        window?.makeKeyAndOrderFront(nil)
         NSApp.activate()
-
-        self.window = window
     }
 }
