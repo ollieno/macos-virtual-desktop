@@ -1,0 +1,32 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="iconClip">
+      <rect width="1024" height="1024" rx="228" ry="228"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#iconClip)">
+    <!-- Background -->
+    <rect width="1024" height="1024" rx="228" ry="228" fill="#0f0f14"/>
+
+    <!-- Subtle grid lines -->
+    <line x1="512" y1="120" x2="512" y2="904" stroke="#1a1a24" stroke-width="3"/>
+    <line x1="120" y1="512" x2="904" y2="512" stroke="#1a1a24" stroke-width="3"/>
+
+    <!-- Top-left: Blue (Desktop 1) -->
+    <rect x="120" y="120" width="370" height="370" rx="24" fill="#12121a" stroke="#3b82f6" stroke-width="10"/>
+    <text x="305" y="340" font-family="SF Pro Rounded, -apple-system, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="140" font-weight="800" fill="white" text-anchor="middle">1</text>
+
+    <!-- Top-right: Green (Desktop 2) -->
+    <rect x="534" y="120" width="370" height="370" rx="24" fill="#12121a" stroke="#22c55e" stroke-width="10"/>
+    <text x="719" y="340" font-family="SF Pro Rounded, -apple-system, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="140" font-weight="800" fill="white" text-anchor="middle">2</text>
+
+    <!-- Bottom-left: Orange (Desktop 3) -->
+    <rect x="120" y="534" width="370" height="370" rx="24" fill="#12121a" stroke="#f97316" stroke-width="10"/>
+    <text x="305" y="754" font-family="SF Pro Rounded, -apple-system, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="140" font-weight="800" fill="white" text-anchor="middle">3</text>
+
+    <!-- Bottom-right: Purple (Desktop 4) -->
+    <rect x="534" y="534" width="370" height="370" rx="24" fill="#12121a" stroke="#a855f7" stroke-width="10"/>
+    <text x="719" y="754" font-family="SF Pro Rounded, -apple-system, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="140" font-weight="800" fill="white" text-anchor="middle">4</text>
+  </g>
+</svg>

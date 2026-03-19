@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00A175CFA64534F2154ECB1B /* SpaceDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */; };
+		C7D8E9F0A1B2C3D4E5F60718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8B9C0D1E2F3041526374859 /* Assets.xcassets */; };
 		3788A33F4A8CA80402C86A93 /* SpaceDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F3A015121EB5536E99DC3 /* SpaceDetector.swift */; };
 		5E2C9F3D5DCE597D8C26C312 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7F383F01B12E2D008A631C /* AppDelegate.swift */; };
 		6D42EA1C299F86C8FB76C6F7 /* NameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 347F5AEBA3C593D5C5CBAF5C /* NameStore.swift */; };
@@ -16,9 +17,11 @@
 		AA3BA2C9FD012F4172ED05C2 /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAABB1F182D0D8C1D36FE12 /* LaunchAtLogin.swift */; };
 		B3EB34C5EAF8D7AB45CFB7B3 /* OverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */; };
 		BC1782517D0DC5D58FB34EAE /* NameStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */; };
+		A1B2C3D4E5F607182930A1B2 /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F607182930A1B2C3 /* SettingsTests.swift */; };
 		BE99A3A033D8A3624283858B /* RenamePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B72B3C7E7E845BE27BE318C /* RenamePopover.swift */; };
 		C4A1B2D3E5F60718293A4B5C /* DesktopColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B2C3E4F6071829304B5C6D /* DesktopColors.swift */; };
 		E6C3D4F50819293A4B5C6D7E /* BorderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D4E5061A2B3C4D5E6F7081 /* BorderWindow.swift */; };
+		A9B1C2D3E4F506172839A0B1 /* IdentifierWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C1D2E3F405162738495A6B /* IdentifierWindow.swift */; };
 		BEA66CC443F2F2EF726AE89B /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD917B7D72D1E5CF78A98B7 /* MenuBarController.swift */; };
 D4E5F60718293A4B5C6D7E8F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F607182930A1B2C3D4E5F6 /* Settings.swift */; };
 /* End PBXBuildFile section */
@@ -38,6 +41,7 @@ D4E5F60718293A4B5C6D7E8F /* Settings.swift in Sources */ = {isa = PBXBuildFile; 
 		1026DF019CD4FCC16F1AC18B /* VirtualDesktopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirtualDesktopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5B2C3E4F6071829304B5C6D /* DesktopColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesktopColors.swift; sourceTree = "<group>"; };
 		F7D4E5061A2B3C4D5E6F7081 /* BorderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderWindow.swift; sourceTree = "<group>"; };
+		B0C1D2E3F405162738495A6B /* IdentifierWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifierWindow.swift; sourceTree = "<group>"; };
 E5F607182930A1B2C3D4E5F6 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		1641276AE62CE1BBA3CBE300 /* PrivateAPIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateAPIs.swift; sourceTree = "<group>"; };
 		1DD917B7D72D1E5CF78A98B7 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
@@ -45,12 +49,14 @@ E5F607182930A1B2C3D4E5F6 /* Settings.swift */ = {isa = PBXFileReference; lastKno
 		3B72B3C7E7E845BE27BE318C /* RenamePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenamePopover.swift; sourceTree = "<group>"; };
 		3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameStoreTests.swift; sourceTree = "<group>"; };
 		4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceDetectorTests.swift; sourceTree = "<group>"; };
+		B2C3D4E5F607182930A1B2C3 /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		510CF64BBA085656EC9F5C29 /* VirtualDesktop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VirtualDesktop.entitlements; sourceTree = "<group>"; };
 		7BAABB1F182D0D8C1D36FE12 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		925F3A015121EB5536E99DC3 /* SpaceDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceDetector.swift; sourceTree = "<group>"; };
 		99396108361368820FE87EA6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E22A6A71DAE7F03AC32943B7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindow.swift; sourceTree = "<group>"; };
+		A8B9C0D1E2F3041526374859 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA7F383F01B12E2D008A631C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,6 +84,7 @@ E5F607182930A1B2C3D4E5F6 /* Settings.swift */ = {isa = PBXFileReference; lastKno
 			children = (
 				F7D4E5061A2B3C4D5E6F7081 /* BorderWindow.swift */,
 				D5B2C3E4F6071829304B5C6D /* DesktopColors.swift */,
+				B0C1D2E3F405162738495A6B /* IdentifierWindow.swift */,
 				1DD917B7D72D1E5CF78A98B7 /* MenuBarController.swift */,
 EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 				3B72B3C7E7E845BE27BE318C /* RenamePopover.swift */,
@@ -89,6 +96,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 			isa = PBXGroup;
 			children = (
 				3F08CB2B61E3BAE2C9E66E6B /* NameStoreTests.swift */,
+				B2C3D4E5F607182930A1B2C3 /* SettingsTests.swift */,
 				4AF9422A8DA8AA10F8348A64 /* SpaceDetectorTests.swift */,
 			);
 			path = VirtualDesktopTests;
@@ -109,6 +117,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 		D6ADB8EBB21BAE54AABB2D6B /* VirtualDesktop */ = {
 			isa = PBXGroup;
 			children = (
+				A8B9C0D1E2F3041526374859 /* Assets.xcassets */,
 				99396108361368820FE87EA6 /* Info.plist */,
 				510CF64BBA085656EC9F5C29 /* VirtualDesktop.entitlements */,
 				045018E0FC2771F90A221368 /* App */,
@@ -152,6 +161,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 			isa = PBXNativeTarget;
 			buildConfigurationList = 96D154BD7AFD18F2A14AE95B /* Build configuration list for PBXNativeTarget "VirtualDesktop" */;
 			buildPhases = (
+				D1E2F3041526374859A0B1C2 /* Resources */,
 				19015B353B05CD26D2A38B5E /* Sources */,
 			);
 			buildRules = (
@@ -196,6 +206,17 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		D1E2F3041526374859A0B1C2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7D8E9F0A1B2C3D4E5F60718 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		19015B353B05CD26D2A38B5E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -203,6 +224,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 			files = (
 				5E2C9F3D5DCE597D8C26C312 /* AppDelegate.swift in Sources */,
 				E6C3D4F50819293A4B5C6D7E /* BorderWindow.swift in Sources */,
+				A9B1C2D3E4F506172839A0B1 /* IdentifierWindow.swift in Sources */,
 				C4A1B2D3E5F60718293A4B5C /* DesktopColors.swift in Sources */,
 				AA3BA2C9FD012F4172ED05C2 /* LaunchAtLogin.swift in Sources */,
 				BEA66CC443F2F2EF726AE89B /* MenuBarController.swift in Sources */,
@@ -221,6 +243,7 @@ EB7B154A5B4398B10D10E55F /* OverlayWindow.swift */,
 			buildActionMask = 2147483647;
 			files = (
 				BC1782517D0DC5D58FB34EAE /* NameStoreTests.swift in Sources */,
+				A1B2C3D4E5F607182930A1B2 /* SettingsTests.swift in Sources */,
 				00A175CFA64534F2154ECB1B /* SpaceDetectorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,6 +10,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     private let menu: NSMenu
     private let overlay = OverlayController()
     private let border = BorderController()
+    private let identifier = IdentifierController()
 
     init(spaceDetector: SpaceDetector, nameStore: NameStore) {
         self.spaceDetector = spaceDetector
@@ -23,6 +24,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         observeSpaceChanges()
         updateTitle()
         updateBorder()
+        updateIdentifier()
     }
 
     // MARK: - Setup
@@ -48,6 +50,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             let name = self.nameStore.displayName(forSpaceID: uuid, atIndex: index)
             self.overlay.show(name: name, desktopIndex: index)
             self.updateBorder()
+            self.updateIdentifier()
         }
     }
 
@@ -87,6 +90,17 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             border.update(index: index)
         } else {
             border.hide()
+        }
+    }
+
+    private func updateIdentifier() {
+        let uuid = spaceDetector.activeSpaceUUID()
+        let index = spaceDetector.activeSpaceIndex()
+        if Settings.showIdentifier {
+            let name = nameStore.displayName(forSpaceID: uuid, atIndex: index)
+            identifier.update(name: name, index: index, spaceUUID: uuid)
+        } else {
+            identifier.hide()
         }
     }
 
@@ -138,6 +152,15 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         borderItem.state = Settings.showBorder ? .on : .off
         menu.addItem(borderItem)
 
+        let identifierItem = NSMenuItem(
+            title: "Show Desktop Identifier",
+            action: #selector(toggleIdentifier(_:)),
+            keyEquivalent: ""
+        )
+        identifierItem.target = self
+        identifierItem.state = Settings.showIdentifier ? .on : .off
+        menu.addItem(identifierItem)
+
         menu.addItem(NSMenuItem.separator())
 
         let quitItem = NSMenuItem(title: "Quit VirtualDesktop", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
@@ -168,6 +191,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
             onRename: { [weak self] uuid, newName in
                 self?.nameStore.setName(newName, forSpaceID: uuid)
                 self?.updateTitle()
+                self?.updateIdentifier()
             }
         )
 
@@ -186,6 +210,12 @@ final class MenuBarController: NSObject, NSMenuDelegate {
         Settings.toggleBorder()
         sender.state = Settings.showBorder ? .on : .off
         updateBorder()
+    }
+
+    @objc private func toggleIdentifier(_ sender: NSMenuItem) {
+        Settings.toggleIdentifier()
+        sender.state = Settings.showIdentifier ? .on : .off
+        updateIdentifier()
     }
 
     deinit {
