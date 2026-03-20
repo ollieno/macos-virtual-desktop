@@ -57,6 +57,10 @@ xcodebuild -project VirtualDesktop.xcodeproj -scheme VirtualDesktop test
 ./scripts/build-dmg.sh
 ```
 
+## Known limitations
+
+- **Mission Control still shows "Desktop 1", "Desktop 2", etc.** macOS does not provide any API (public or private) to rename desktops in Mission Control. Your custom names are only visible through VirtualDesktop's own UI (menu bar, overlay, borders, identifier).
+
 ## How it works
 
 VirtualDesktop uses undocumented SkyLight framework APIs (via `dlsym`) to detect virtual desktop UUIDs and space changes. There is no public macOS API for this. The app runs as a menu bar-only utility (no Dock icon) and is not sandboxed, which is required for SkyLight access.
